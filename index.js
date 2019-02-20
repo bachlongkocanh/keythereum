@@ -255,7 +255,7 @@ module.exports = {
           password.toString("utf8"),
           sjcl.codec.hex.toBits(salt.toString("hex")),
           options.kdfparams.c || self.constants.pbkdf2.c,
-          (options.kdfparams.dklen || self.constants.pbkdf2.dklen)*8
+          (options.kdfparams.dklen || self.constants.pbkdf2.dklen) * 8
         )), "hex");
       }
       return this.crypto.pbkdf2Sync(
@@ -272,7 +272,7 @@ module.exports = {
           password.toString("utf8"),
           sjcl.codec.hex.toBits(salt.toString("hex")),
           options.kdfparams.c || self.constants.pbkdf2.c,
-          (options.kdfparams.dklen || self.constants.pbkdf2.dklen)*8
+          (options.kdfparams.dklen || self.constants.pbkdf2.dklen) * 8
         )), "hex"));
       }, 0);
     } else {
@@ -479,26 +479,26 @@ module.exports = {
    * @param {function=} cb Callback function (optional).
    * @return {string} JSON filename (Node.js) or JSON string (browser).
    */
-  exportToFile: function (keyObject, keystore, cb) {
-    var outfile, outpath, json, fs;
-    keystore = keystore || "keystore";
-    outfile = this.generateKeystoreFilename(keyObject.address);
-    json = JSON.stringify(keyObject);
-    if (this.browser) {
-      if (!isFunction(cb)) return json;
-      return cb(json);
-    }
-    outpath = require("path").join(keystore, outfile);
-    fs = require("fs");
-    if (!isFunction(cb)) {
-      fs.writeFileSync(outpath, json);
-      return outpath;
-    }
-    fs.writeFile(outpath, json, function (err) {
-      if (err) return cb(err);
-      cb(outpath);
-    });
-  },
+  // exportToFile: function (keyObject, keystore, cb) {
+  //   var outfile, outpath, json, fs;
+  //   keystore = keystore || "keystore";
+  //   outfile = this.generateKeystoreFilename(keyObject.address);
+  //   json = JSON.stringify(keyObject);
+  //   if (this.browser) {
+  //     if (!isFunction(cb)) return json;
+  //     return cb(json);
+  //   }
+  //   outpath = require("path").join(keystore, outfile);
+  //   fs = require("fs");
+  //   if (!isFunction(cb)) {
+  //     fs.writeFileSync(outpath, json);
+  //     return outpath;
+  //   }
+  //   fs.writeFile(outpath, json, function (err) {
+  //     if (err) return cb(err);
+  //     cb(outpath);
+  //   });
+  // },
 
   /**
    * Import key data object from keystore JSON file.
@@ -508,46 +508,46 @@ module.exports = {
    * @param {function=} cb Callback function (optional).
    * @return {Object} Keystore data file's contents.
    */
-  importFromFile: function (address, datadir, cb) {
-    var keystore, filepath, path, fs;
-    if (this.browser) throw new Error("method only available in Node.js");
-    path = require("path");
-    fs = require("fs");
-    address = address.replace("0x", "");
-    address = address.toLowerCase();
+  // importFromFile: function (address, datadir, cb) {
+  //   var keystore, filepath, path, fs;
+  //   if (this.browser) throw new Error("method only available in Node.js");
+  //   path = require("path");
+  //   fs = require("fs");
+  //   address = address.replace("0x", "");
+  //   address = address.toLowerCase();
 
-    function findKeyfile(keystore, address, files) {
-      var i, len, filepath = null;
-      for (i = 0, len = files.length; i < len; ++i) {
-        if (files[i].indexOf(address) > -1) {
-          filepath = path.join(keystore, files[i]);
-          if (fs.lstatSync(filepath).isDirectory()) {
-            filepath = path.join(filepath, files[i]);
-          }
-          break;
-        }
-      }
-      return filepath;
-    }
+  //   function findKeyfile(keystore, address, files) {
+  //     var i, len, filepath = null;
+  //     for (i = 0, len = files.length; i < len; ++i) {
+  //       if (files[i].indexOf(address) > -1) {
+  //         filepath = path.join(keystore, files[i]);
+  //         if (fs.lstatSync(filepath).isDirectory()) {
+  //           filepath = path.join(filepath, files[i]);
+  //         }
+  //         break;
+  //       }
+  //     }
+  //     return filepath;
+  //   }
 
-    datadir = datadir || path.join(process.env.HOME, ".ethereum");
-    keystore = path.join(datadir, "keystore");
-    if (!isFunction(cb)) {
-      filepath = findKeyfile(keystore, address, fs.readdirSync(keystore));
-      if (!filepath) {
-        throw new Error("could not find key file for address " + address);
-      }
-      return JSON.parse(fs.readFileSync(filepath));
-    }
-    fs.readdir(keystore, function (ex, files) {
-      var filepath;
-      if (ex) return cb(ex);
-      filepath = findKeyfile(keystore, address, files);
-      if (!filepath) {
-        return new Error("could not find key file for address " + address);
-      }
-      return cb(JSON.parse(fs.readFileSync(filepath)));
-    });
-  }
+  //   datadir = datadir || path.join(process.env.HOME, ".ethereum");
+  //   keystore = path.join(datadir, "keystore");
+  //   if (!isFunction(cb)) {
+  //     filepath = findKeyfile(keystore, address, fs.readdirSync(keystore));
+  //     if (!filepath) {
+  //       throw new Error("could not find key file for address " + address);
+  //     }
+  //     return JSON.parse(fs.readFileSync(filepath));
+  //   }
+  //   fs.readdir(keystore, function (ex, files) {
+  //     var filepath;
+  //     if (ex) return cb(ex);
+  //     filepath = findKeyfile(keystore, address, files);
+  //     if (!filepath) {
+  //       return new Error("could not find key file for address " + address);
+  //     }
+  //     return cb(JSON.parse(fs.readFileSync(filepath)));
+  //   });
+  // }
 
 };
